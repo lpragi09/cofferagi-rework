@@ -195,7 +195,7 @@ export function CoffeeCatalog() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((p, idx) => (
           <Reveal key={p.id} delayMs={80 + idx * 60}>
-            <div className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition hover:bg-white/7">
+            <div className="group relative h-full overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl transition hover:bg-white/7">
               <div
                 className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-0 blur-2xl transition group-hover:opacity-70"
                 style={{
@@ -205,7 +205,7 @@ export function CoffeeCatalog() {
                 aria-hidden="true"
               />
 
-              <div className="relative">
+              <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold tracking-wide text-[color:color-mix(in_oklab,var(--ragi-cream)_70%,transparent)]">
@@ -224,11 +224,12 @@ export function CoffeeCatalog() {
                   </div>
                 </div>
 
-                <p className="mt-3 text-sm leading-relaxed text-[color:color-mix(in_oklab,var(--ragi-cream)_78%,transparent)]">
+                <p className="mt-2 min-h-[48px] text-sm leading-relaxed text-[color:color-mix(in_oklab,var(--ragi-cream)_78%,transparent)]">
                   {p.notes}
                 </p>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                {/* Reserva espaço para 2 linhas de badges (padrão do "Fermentado Tropical") */}
+                <div className="mt-3 flex min-h-[68px] flex-wrap content-start gap-2">
                   {p.badges.map((b) => (
                     <span
                       key={b}
@@ -239,55 +240,57 @@ export function CoffeeCatalog() {
                   ))}
                 </div>
 
-                <div className="mt-5 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={cn(
-                            "h-4 w-4",
-                            i < p.intensity
-                              ? "fill-[var(--ragi-gold)] text-[var(--ragi-gold)]"
-                              : "text-white/15",
-                          )}
-                          aria-hidden="true"
-                        />
-                      ))}
+                <div className="mt-auto pt-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={cn(
+                              "h-4 w-4",
+                              i < p.intensity
+                                ? "fill-[var(--ragi-gold)] text-[var(--ragi-gold)]"
+                                : "text-white/15",
+                            )}
+                            aria-hidden="true"
+                          />
+                        ))}
+                      </div>
+                      <span className="text-xs font-medium text-[color:color-mix(in_oklab,var(--ragi-cream)_68%,transparent)]">
+                        Intensidade
+                      </span>
                     </div>
-                    <span className="text-xs font-medium text-[color:color-mix(in_oklab,var(--ragi-cream)_68%,transparent)]">
-                      Intensidade
-                    </span>
+
+                    <div className="text-right">
+                      <p className="text-xs font-medium text-[color:color-mix(in_oklab,var(--ragi-cream)_65%,transparent)]">
+                        a partir de
+                      </p>
+                      <p className="text-base font-extrabold tracking-tight text-[var(--ragi-cream)]">
+                        {formatBRL(p.priceFrom)}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="text-right">
-                    <p className="text-xs font-medium text-[color:color-mix(in_oklab,var(--ragi-cream)_65%,transparent)]">
-                      a partir de
-                    </p>
-                    <p className="text-base font-extrabold tracking-tight text-[var(--ragi-cream)]">
-                      {formatBRL(p.priceFrom)}
-                    </p>
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-[var(--ragi-cream)] transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--ragi-gold)]/70"
+                      onClick={() => setSelected(p)}
+                    >
+                      Ver detalhes
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-2xl bg-[linear-gradient(135deg,var(--ragi-gold),var(--ragi-gold-2))] px-4 py-2 text-sm font-extrabold text-black transition hover:brightness-[1.05] focus:outline-none focus:ring-2 focus:ring-[var(--ragi-gold)]/70"
+                      // Placeholder: futura integração com Supabase (carrinho/checkout) com RLS
+                      onClick={() => {
+                        window.open(getWhatsAppHref(buyMessage(p)), "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      Comprar
+                    </button>
                   </div>
-                </div>
-
-                <div className="mt-5 grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-[var(--ragi-cream)] transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--ragi-gold)]/70"
-                    onClick={() => setSelected(p)}
-                  >
-                    Ver detalhes
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-2xl bg-[linear-gradient(135deg,var(--ragi-gold),var(--ragi-gold-2))] px-4 py-2 text-sm font-extrabold text-black transition hover:brightness-[1.05] focus:outline-none focus:ring-2 focus:ring-[var(--ragi-gold)]/70"
-                    // Placeholder: futura integração com Supabase (carrinho/checkout) com RLS
-                    onClick={() => {
-                      window.open(getWhatsAppHref(buyMessage(p)), "_blank", "noopener,noreferrer");
-                    }}
-                  >
-                    Comprar
-                  </button>
                 </div>
               </div>
             </div>
