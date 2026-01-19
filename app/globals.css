@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Paleta (Estilo Ragi): café, creme e dourado suave */
+  --ragi-bg: #0b0a08; /* espresso profundo */
+  --ragi-surface: #12100d; /* superfície escura premium */
+  --ragi-cream: #fbf6ea; /* creme */
+  --ragi-cream-2: #f3ead7; /* creme quente */
+  --ragi-coffee: #2a1c12; /* marrom café */
+  --ragi-gold: #d6b36a; /* dourado suave */
+  --ragi-gold-2: #b98c40; /* dourado mais fechado */
+  --ragi-muted: #c9c2b5; /* texto secundário no dark */
+  --ragi-ink: #15130f; /* texto no light */
+
+  --background: var(--ragi-bg);
+  --foreground: var(--ragi-cream);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Mantemos um dark premium como padrão; se quiser modo claro no futuro, dá pra introduzir toggle. */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Acessibilidade e UX */
+::selection {
+  background: color-mix(in oklab, var(--ragi-gold) 35%, transparent);
+  color: var(--ragi-cream);
+}
+
+/* Animações e efeitos (sem libs) */
+@keyframes ragi-rise {
+  from {
+    opacity: 0.65;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes ragi-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes ragi-shine {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* Reveal "clássico" (por elemento) — estável e sem travar/bugar ao redimensionar */
+.ragi-reveal {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 520ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.ragi-reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ragi-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+  }
+}
+
+.ragi-glow {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--ragi-gold) 14%, transparent),
+    0 12px 60px color-mix(in oklab, #000 50%, transparent);
 }
