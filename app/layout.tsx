@@ -20,6 +20,10 @@ export const metadata: Metadata = {
   title: "Cofferagi — Café especial, do grão à xícara",
   description:
     "Cafés especiais selecionados, torra precisa e uma experiência premium pensada para quem leva café a sério.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: ["/icon.svg"],
+  },
 };
 
 export default function RootLayout({
