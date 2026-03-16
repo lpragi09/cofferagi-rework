@@ -40,11 +40,13 @@ export function Reveal({ children, className, delayMs = 0, once = false }: Revea
           setRevealed(true);
           if (once) io.disconnect();
         } else if (!once) {
-          setRevealed(false);
+          // Só "reseta" quando sair de verdade da viewport.
+          // Isso evita flicker quando o usuário está rolando devagar.
+          if ((entry?.intersectionRatio ?? 0) === 0) setRevealed(false);
         }
       },
       // Dispara mais cedo (evita parecer que anima só no meio)
-      { threshold: 0.06, rootMargin: "10% 0px -25% 0px" },
+      { threshold: 0.02, rootMargin: "22% 0px -18% 0px" },
     );
 
     io.observe(el);
